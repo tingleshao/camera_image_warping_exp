@@ -567,5 +567,9 @@ R18 = [0.93535024, 0.0467427, -0.3506209;
  0.34161037, 0.13780323, 0.92968416];
 
 % TODO: construct H matrix: H = KRK^(-1), (true?)
+% and try warping all images, see how the result look like 
 
+% Synthesize images, with colors
+% Warp the images
+% Then show the result
 
