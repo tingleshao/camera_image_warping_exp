@@ -566,10 +566,20 @@ R18 = [0.93535024, 0.0467427, -0.3506209;
  -0.091772631, 0.9893561, -0.1129265;
  0.34161037, 0.13780323, 0.92968416];
 
-% TODO: construct H matrix: H = KRK^(-1), (true?)
+% construct H matrix: H = KRK^(-1), (true?)
 % and try warping all images, see how the result look like 
 
 % Synthesize images, with colors
+for i = 1:18
+   eval(sprintf('img%d = imread(''autumn.tif'');',i));
+end
+
+
 % Warp the images
 % Then show the result
+for i = 1:18
+    eval(sprintf('H%d = K%d * R%d * (K%d)^(-1);',i,i,i,i));
+end
+
+
 
