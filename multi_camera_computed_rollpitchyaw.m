@@ -585,10 +585,32 @@ for i = 1:18
 end
 
 % compute the euler angels between 10 and 11, 10 and 9
-eul8 = rotm2eul(R8)
+%eul8 = rotm2eul(R8)
 eul9 = rotm2eul(R9)
 eul10 = rotm2eul(R10)
 eul11 = rotm2eul(R11)
+eul4 = rotm2eul(R4)
+eul16 = rotm2eul(R16)
+
+tanleft = tan(eul11(2));
+tanright = tan(eul9(2));
+tanup = tan(eul16(3));
+tandown = tan(eul4(3));
+
+% based on these values (10, 4, 9, 11, 16), compute other euls... 
+eul1 = [eul10(1), atan(3*(tanright)), atan(tandown)];
+eul2 = [eul10(1), atan(2*(tanright)), atan(tandown)];
+eul3 = [eul10(1), atan((tanright)), atan(tandown)];
+eul5 = [eul10(1), atan(tanleft), atan(tandown)];
+eul6 = [eul10(1), atan(2*(tanleft)), atan(tandown)];
+eul7 = [eul10(1), atan(3*(tanright)), eul10(3)];
+eul8 = [eul10(1), atan(2*(tanright)), eul10(3)];
+eul12 = [eul10(1), atan(2*(tanleft)), eul10(3)];
+eul13 = [eul10(1), atan(3*(tanright)), atan(tanup)];
+eul14 = [eul10(1), atan(2*(tanright)), atan(tanup)];
+eul15 = [eul10(1), atan(tanright), atan(tanup)];
+eul17 = [eul10(1), atan(tanleft), atan(tanup)];
+eul18 = [eul10(1), atan(2*(tanleft)), atan(tanup)];
 
 xMin = 0
 xMax = 1000
