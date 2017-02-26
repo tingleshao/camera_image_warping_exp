@@ -1286,7 +1286,7 @@ for i = 1:18
 
   %  eval(sprintf('I = imwarp(''perspective'',H%d)',i));
 %warpedImage = imwarp(img1, T, 'OutputView', panoramaView);\
-    eval(sprintf('[I%d, RB%d] = imfuse(I%d,RB%d,I%d,RB%d,''blend'');',list(i+1),list(i+1),i,i,list(i),list(i)));
+  %  eval(sprintf('[I%d, RB%d] = imfuse(I%d,RB%d,I%d,RB%d,''blend'');',list(i+1),list(i+1),i,i,list(i),list(i)));
     eval(sprintf('[I%d, RB%d] = imwarp(img%d,T);',i,i,i));
     %figure;
     subplot(3,6,i);
@@ -1302,70 +1302,89 @@ end
 %end
 
 
-corners = [478, 2204, 393, 290;
-           185, 2221, 390, 281;
-           -114, 2242, 379, 270;
-           -391, 2237, 364, 269;
-           -654, 2227, 355, 271;
-           -937, 2199, 369, 274;
-           485, 2008, 373, 263;
-           187, 2012, 372, 263;
-           -91, 2015, 364, 261;
-           -361, 2015, 354, 259;
-           -640, 2015, 343, 259;
-           -896, 2023, 333, 254;
-           487, 1778, 393, 286;
-           193, 1771, 386, 274;
-           -87, 1775, 367, 259;
-           -362, 1774, 361, 258;
-           -658, 1785, 367, 271;
-           -932, 1803, 364, 279];
-       
- corners(:,2) = corners(:,2)-1770;
- corners(:,1) = corners(:,1) + 938;
+%corners = [478, 2204, 393, 290;
+ %          185, 2221, 390, 281;
+ %         -114, 2242, 379, 270;
+ %          -391, 2237, 364, 269;
+ %          -654, 2227, 355, 271;
+ %          -937, 2199, 369, 274;
+ %          485, 2008, 373, 263;
+ %          187, 2012, 372, 263;
+ %          -91, 2015, 364, 261;
+ %          -361, 2015, 354, 259;
+ %          -640, 2015, 343, 259;
+ %          -896, 2023, 333, 254;
+ %          487, 1778, 393, 286;
+ %          193, 1771, 386, 274;
+ %          -87, 1775, 367, 259;
+ %          -362, 1774, 361, 258;
+ %          -658, 1785, 367, 271;
+ %          -932, 1803, 364, 279];
  
+corners = [1464, 7819, 1378, 1018;
+           463, 7884, 1341, 976;
+           -551, 7958, 1281, 930;
+           -1476, 7936, 1224, 929;
+           -2357, 7896, 1196, 935;
+           -3248, 7803, 1192, 947;
+           1491, 7129, 1298, 928;
+           458, 7153, 1286, 922;
+           -468, 7166, 1224, 912;
+           -1367, 7176, 1181, 887;
+           -2302, 7172, 1149, 888;
+           -3161, 7185, 1129, 880;
+           1493, 6309, 1371, 1010;
+           475, 6301, 1325, 960;
+           -493, 6317, 1261, 918;
+           -1388, 6326, 1193, 902;
+           -2348, 6382, 1188, 925;
+           -3257, 6428, 1201, 957]
  
- corners(1,3) = ceil(corners(1,3) * 1.25);
- corners(1,4) = ceil(corners(1,4) * 1.25);
-
- corners(6,3) = ceil(corners(6,3) * 1.25);
- corners(6,4) = ceil(corners(6,4) * 1.25);
-
- corners(7,3) = ceil(corners(7,3) * 1.25);
- corners(7,4) = ceil(corners(7,4) * 1.25);
-
- corners(12,3) = ceil(corners(12,3) * 1.25);
- corners(12,4) = ceil(corners(12,4) * 1.25);
-
- corners(13,3) = ceil(corners(13,3) * 1.25);
- corners(13,4) = ceil(corners(13,4) * 1.25);
-
- corners(18,3) = ceil(corners(18,3) * 1.25);
- corners(18,4) = ceil(corners(18,4) * 1.25);
-
- corners(2,3) = ceil(corners(2,3) * 1.1);
- corners(2,4) = ceil(corners(2,4) * 1.1);
-
- corners(5,3) = ceil(corners(5,3) * 1.1);
- corners(5,4) = ceil(corners(5,4) * 1.1);
-
- corners(8,3) = ceil(corners(8,3) * 1.1);
- corners(8,4) = ceil(corners(8,4) * 1.1);
-
- corners(11,3) = ceil(corners(11,3) * 1.1);
- corners(11,4) = ceil(corners(11,4) * 1.1);
-
- corners(14,3) = ceil(corners(14,3) * 1.1);
- corners(14,4) = ceil(corners(14,4) * 1.1);
+ corners(:,2) = corners(:,2) - 6300;
+ corners(:,1) = corners(:,1) + 3258;
  
- corners(17,3) = ceil(corners(17,3) * 1.1);
- corners(17,4) = ceil(corners(17,4) * 1.1);
- 
-  corners(13,2) = ceil(corners(13,2) - corners(13,4) * 0.12)
-  corners(18,2) = ceil(corners(18,2) - corners(18,4) * 0.12)
-  corners(17,2) = ceil(corners(17,2) - corners(17,4) * 0.05)
-  corners(14,2) = ceil(corners(14,2) - corners(14,4) * 0.05)
-  corners(:,2) = corners(:,2) + 91
+%  
+%  corners(1,3) = ceil(corners(1,3) * 1.25);
+%  corners(1,4) = ceil(corners(1,4) * 1.25);
+% 
+%  corners(6,3) = ceil(corners(6,3) * 1.25);
+%  corners(6,4) = ceil(corners(6,4) * 1.25);
+% 
+%  corners(7,3) = ceil(corners(7,3) * 1.25);
+%  corners(7,4) = ceil(corners(7,4) * 1.25);
+% 
+%  corners(12,3) = ceil(corners(12,3) * 1.25);
+%  corners(12,4) = ceil(corners(12,4) * 1.25);
+% 
+%  corners(13,3) = ceil(corners(13,3) * 1.25);
+%  corners(13,4) = ceil(corners(13,4) * 1.25);
+% 
+%  corners(18,3) = ceil(corners(18,3) * 1.25);
+%  corners(18,4) = ceil(corners(18,4) * 1.25);
+% 
+%  corners(2,3) = ceil(corners(2,3) * 1.1);
+%  corners(2,4) = ceil(corners(2,4) * 1.1);
+% 
+%  corners(5,3) = ceil(corners(5,3) * 1.1);
+%  corners(5,4) = ceil(corners(5,4) * 1.1);
+% 
+%  corners(8,3) = ceil(corners(8,3) * 1.1);
+%  corners(8,4) = ceil(corners(8,4) * 1.1);
+% 
+%  corners(11,3) = ceil(corners(11,3) * 1.1);
+%  corners(11,4) = ceil(corners(11,4) * 1.1);
+% 
+%  corners(14,3) = ceil(corners(14,3) * 1.1);
+%  corners(14,4) = ceil(corners(14,4) * 1.1);
+%  
+%  corners(17,3) = ceil(corners(17,3) * 1.1);
+%  corners(17,4) = ceil(corners(17,4) * 1.1);
+%  
+%   corners(13,2) = ceil(corners(13,2) - corners(13,4) * 0.12)
+%   corners(18,2) = ceil(corners(18,2) - corners(18,4) * 0.12)
+%   corners(17,2) = ceil(corners(17,2) - corners(17,4) * 0.05)
+%   corners(14,2) = ceil(corners(14,2) - corners(14,4) * 0.05)
+%  corners(:,2) = corners(:,2) + 91
   
 
 figure;
@@ -1375,17 +1394,19 @@ for i = 1:18
 end
 hold off
 
-result = uint8(zeros(938, 2513,3));
+%result = uint8(zeros(938, 2513,3));
+result = uint8(zeros(2588, 6122,3));
+
 for i = 1:18
  %   Is1 = imresize(I1, [corners(i,4), corners(i,3)]);
   %  result(corners(i,2):corners(i,2)+corners(i,4)-1, corners(i,1):corners(i,1)+corners(i,3)-1,:) = Is1;
-    if i == 1 || i == 6 || i == 7 || i == 12 || i == 13 || i == 18 
-        eval(sprintf('Is%d = imresize(I%d, [corners(i,4), corners(i,3)]);',i,i));
-    elseif i == 2 || i == 5 || i == 8 || i == 11 || i == 14 || i == 17 
-        eval(sprintf('Is%d = imresize(I%d, [corners(i,4), corners(i,3)]);',i,i));
-    else
+ %   if i == 1 || i == 6 || i == 7 || i == 12 || i == 13 || i == 18 
+  %      eval(sprintf('Is%d = imresize(I%d, [corners(i,4), corners(i,3)]);',i,i));
+ %   elseif i == 2 || i == 5 || i == 8 || i == 11 || i == 14 || i == 17 
+  %      eval(sprintf('Is%d = imresize(I%d, [corners(i,4), corners(i,3)]);',i,i));
+ %   else
          eval(sprintf('Is%d = imresize(I%d, [corners(i,4), corners(i,3)]);',i,i));
-    end
+ %   end
    eval(sprintf('result(corners(i,2):corners(i,2)+corners(i,4)-1, corners(i,1):corners(i,1)+corners(i,3)-1,:) = result(corners(i,2):corners(i,2)+corners(i,4)-1, corners(i,1):corners(i,1)+corners(i,3)-1,:) +Is%d;',i));
 end
 
