@@ -598,15 +598,15 @@ tanup = tan(eul16(3));
 tandown = tan(eul4(3));
 
 % based on these values (10, 4, 9, 11, 16), compute other euls... 
-eul1 = [eul10(1), atan(3*(tanright)), atan(tandown)];
+eul1 = [eul10(1), atan(4*(tanright)), atan(tandown)];
 eul2 = [eul10(1), atan(2*(tanright)), atan(tandown)];
 eul3 = [eul10(1), atan((tanright)), atan(tandown)];
 eul5 = [eul10(1), atan(tanleft), atan(tandown)];
 eul6 = [eul10(1), atan(2*(tanleft)), atan(tandown)];
-eul7 = [eul10(1), atan(3*(tanright)), eul10(3)];
+eul7 = [eul10(1), atan(4*(tanright)), eul10(3)];
 eul8 = [eul10(1), atan(2*(tanright)), eul10(3)];
 eul12 = [eul10(1), atan(2*(tanleft)), eul10(3)];
-eul13 = [eul10(1), atan(3*(tanright)), atan(tanup)];
+eul13 = [eul10(1), atan(4*(tanright)), atan(tanup)];
 eul14 = [eul10(1), atan(2*(tanright)), atan(tanup)];
 eul15 = [eul10(1), atan(tanright), atan(tanup)];
 eul17 = [eul10(1), atan(tanleft), atan(tanup)];
@@ -658,8 +658,8 @@ for i = 1:14
 end
 
 [I12,RB12] = imfuse(I1,RB1,I2,RB2, 'blend');
-list = [1,12,123,1234,12345,123456,12345678,123456789,12345678910,1234567891011,1234567891012,1234567891013,1234567891014,1234567891015];
-for i = 2:14
+list = [1,12,123,1234,12345,123456,1234567, 12345678,123456789,12345678910,1234567891011,1234567891012,1234567891013,1234567891014,1234567891015,1234567891016,1234567891017,1234567891018];
+for i = 2:17
     eval(sprintf('[I%d,RB%d] = imfuse(I%d,RB%d,I%d,RB%d,''blend'');',list(i+1),list(i+1),i,i,list(i),list(i)));
 end
 
