@@ -581,7 +581,8 @@ end
 % Warp the images
 % Then show the result
 for i = 1:18
-    eval(sprintf('H%d = K%d * R%d * (K%d)^(-1);',i,i,i,i));
+    eval(sprintf('H%d = (K%d) * R%d * (K%d)^(-1);',i,i,i,i));
+   % eval(sprintf('H%d = K%d * R%d;',i,i,i));
 end
 
 % compute the euler angels between 10 and 11, 10 and 9
@@ -631,10 +632,10 @@ R14 = eul2rotm(eul14);
 R15 = eul2rotm(eul15);
 R17 = eul2rotm(eul17);
 R18 = eul2rotm(eul18);
-
-for i = 1:18
-    eval(sprintf('H%d = K%d * R%d * (K%d)^(-1);',i,i,i,i));
-end
+% 
+% for i = 1:18
+%     eval(sprintf('H%d = K%d * R%d * (K%d)^(-1);',i,i,i,i));
+% end
 
 %Width and height of panorama.
 width  = round(xMax - xMin);
@@ -645,7 +646,7 @@ panoramaView = imref2d([height width], xLimits, yLimits);
 
 for i = 1:14
   %  eval(sprintf('T = projective2d(transpose(H%d));',i));
-      eval(sprintf('T = projective2d(H%d'');',i));
+      eval(sprintf('T = projective2d(H%d);',i));
 
   %  eval(sprintf('I = imwarp(''perspective'',H%d)',i));
 %warpedImage = imwarp(img1, T, 'OutputView', panoramaView);\

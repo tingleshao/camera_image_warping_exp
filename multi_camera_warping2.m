@@ -1260,7 +1260,7 @@ end
 % Warp the images
 % Then show the result
 for i = 1:18
-    eval(sprintf('H%d = K%d * R%d * (K%d)^(-1);',i,i,i,i));
+    eval(sprintf('H%d = (K%d) * R%d * (K%d)^(-1);',i,i,i,i));
 end
 
 
