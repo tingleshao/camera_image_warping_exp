@@ -124,7 +124,7 @@ R18 = [0.91922122, 0.02641619, -0.39285406;
  -0.077337801, 0.99042439, -0.11436135;
  0.38607126, 0.13550586, 0.91246217];
 
-% construct H matrix: H = KRK^(-1), (true?)
+% construct H matrix: H = KRK^(-1)
 % and try warping all images, see how the result look like
 
 % Synthesize images, with colors
@@ -168,7 +168,7 @@ corners(:,1) = corners(:,1) + 3258;
 final_euls = zeros(18,3);
 % for each camera, iterate until it is at the corner
 for i = 1:18
-    eval(sprintf('final_euls(i,:) = rotation_iterator(corner(i.:), img%d, eul%d, K%d)',i,i,i));
+    eval(sprintf('final_euls(i,:) = rotation_iterator(corners(i,:), img%d, eul%d, K%d)',i,i,i));
 end
 
 % based on the new euls, display the result
@@ -179,7 +179,6 @@ for i = 1:18
 end
 hold off
 
-%result = uint8(zeros(938, 2513,3));
 result = uint8(zeros(2588, 6122,3));
 
 for i = 1:18
