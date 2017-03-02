@@ -578,9 +578,9 @@ end
 % Warp the images
 % Then show the result
 for i = 1:18
-    eval(sprintf('H%d = K%d * R%d * (K%d)^(-1);',i,i,i,i));
+    %eval(sprintf('H%d = K%d * R%d * (K%d)^(-1);',i,i,i,i));
+    eval(sprintf('H%d = K%d * R%d^(-1);',i,i,i));
 end
-
 
 xMin = 0
 xMax = 1000
@@ -595,9 +595,9 @@ xLimits = [xMin xMax];
 yLimits = [yMin yMax];
 panoramaView = imref2d([height width], xLimits, yLimits);
 
-for i = 1:14
+for i = 1:18
   %  eval(sprintf('T = projective2d(transpose(H%d));',i));
-      eval(sprintf('T = projective2d(H%d'');',i));
+    eval(sprintf('T = projective2d(H%d'');',i));
 
   %  eval(sprintf('I = imwarp(''perspective'',H%d)',i));
 %warpedImage = imwarp(img1, T, 'OutputView', panoramaView);\
@@ -610,8 +610,8 @@ for i = 1:14
 end
 
 [I12,RB12] = imfuse(I1,RB1,I2,RB2, 'blend');
-list = [1,12,123,1234,12345,123456,12345678,123456789,12345678910,1234567891011,1234567891012,1234567891013,1234567891014,1234567891015];
-for i = 2:14
-    eval(sprintf('[I%d,RB%d] = imfuse(I%d,RB%d,I%d,RB%d,''blend'');',list(i+1),list(i+1),i,i,list(i),list(i)));
+list = [1,12,123,1234,12345,123456, 1234567, 12345678,123456789,12345678910,1234567891011,1234567891012,1234567891013,1234567891014,1234567891015, 1234567891016, 1234567891017, 1234567891018];
+for i = 2:17
+    eval(sprintf('[I%d,RB%d] = imfuse(I%d,RB%d,I%d,RB%d,''blend'');',list(i+1),list(i+1),i+1,i+1,list(i),list(i)));
 end
 

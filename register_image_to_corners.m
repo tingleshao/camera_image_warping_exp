@@ -124,25 +124,6 @@ R18 = [0.91922122, 0.02641619, -0.39285406;
  -0.077337801, 0.99042439, -0.11436135;
  0.38607126, 0.13550586, 0.91246217];
 
-% construct H matrix: H = KRK^(-1)
-% and try warping all images, see how the result look like
-
-% Synthesize images, with colors
-for i = 1:18
-   eval(sprintf('img%d = imresize(imread(''mcam_%d_scale_2.jpg''),[920,1228]);',i,i));
-end
-
-% Warp the images
-% Then show the result
-for i = 1:18
-    eval(sprintf('H%d = (K%d) * R%d * (K%d)^(-1);',i,i,i,i));
-end
-
-% computing all the eul angles
-for i = 1:18
-    eval(sprintf('eul%d = rotm2eul(R%d);',i,i));
-end
-
 corners = [1464, 7819, 1378, 1018;
            463, 7884, 1341, 976;
            -551, 7958, 1281, 930;
@@ -165,11 +146,69 @@ corners = [1464, 7819, 1378, 1018;
 corners(:,2) = corners(:,2) - 6300;
 corners(:,1) = corners(:,1) + 3258;
  
+% construct H matrix: H = KRK^(-1)
+% and try warping all images, see how the result look like
+
+% Synthesize images, with colors
+for i = 1:18
+   eval(sprintf('img%d = imresize(imread(''mcam_%d_scale_2.jpg''),[corners(i,4),corners(i,3)]);',i,i));
+end
+
+% Warp the images
+% Then show the result
+for i = 1:18
+    eval(sprintf('H%d = (K%d) * R%d * (K%d)^(-1);',i,i,i,i));
+end
+
+% computing all the eul angles
+for i = 1:18
+    eval(sprintf('eul%d = rotm2eul(R%d);',i,i));
+end
+
 final_euls = zeros(18,3);
 % for each camera, iterate until it is at the corner
+K1_ = K1;
+img1_ = img1;
+R1_ = eul2rotm(eul1);
+H1_ = K1_ * R1_ * K1_^(-1);
+T1_ = projective2d(H1_');
+[I1_, RB1_] = imwarp(img1_, T1_);
+RB1_.XWorldLimits
+%{
+H1 = K1 * R1 * K1^(-1);
+T1 = projective2d(H1);
+[I1, RB1] = imwarp(img1, T1);
+RB1.XWorldLimits
+%}
+
+
+
 for i = 1:18
+    i
     eval(sprintf('final_euls(i,:) = rotation_iterator(corners(i,:), img%d, eul%d, K%d)',i,i,i));
 end
+
+%{ final euls = 
+%    -0.0657    0.8957    0.2640
+%    -0.0419    0.7795    0.3012
+%    -0.0217    0.5969    0.2494
+%     0.0107    0.3746    0.2362
+%     0.0389    0.1724    0.2491
+%     0.1254   -0.0670    0.5553
+%     0.0085    0.8774    0.3592
+%     0.0063    0.7673    0.4527
+%    -0.0035    0.6212    0.5010
+%     0.0006    0.4212    0.5221
+%    -0.0147    0.2369    0.4225
+%     0.0005    0.0477    0.5501
+%     0.0871    0.8404    0.5804
+%     0.0581    0.7616    0.6282
+%     0.0241    0.6209    0.6010
+%    -0.0145    0.4580    0.7608
+%    -0.0602    0.3635    0.8321
+%    -0.0839    0.2236    0.7674
+%}
+
 
 % based on the new euls, display the result
 figure;
@@ -186,7 +225,67 @@ for i = 1:18
     eval(sprintf('result(corners(i,2):corners(i,2)+corners(i,4)-1, corners(i,1):corners(i,1)+corners(i,3)-1,:) = result(corners(i,2):corners(i,2)+corners(i,4)-1, corners(i,1):corners(i,1)+corners(i,3)-1,:) +Is%d;',i));
 end
 
+
+%
+
+
+%
+
+
+for i = 1:18
+    eval(sprintf('R%d = eul2rotm(final_euls(i,:))',i));
+    eval(sprintf('H%d = K%d * R%d * (K%d)^(-1);',i,i,i,i));
+    eval(sprintf('T = projective2d(H%d'');',i));
+    eval(sprintf('[I%d, RB%d]=imwarp(img%d,T);',i,i,i));
+
+end
+
+
+[I12,RB12] = imfuse(I1,RB1,I2,RB2, 'blend');
+imglist =[1 2 3 4 5 6 12 7 13 14 15 16 17 18 8 11 9 10];
+list = [1,12,123,1234,12345,123456, 1234567, 12345678,123456789,12345678910,1234567891011,1234567891012,1234567891013,1234567891014,1234567891015, 1234567891016, 1234567891017, 1234567891018];
+for i = 2:17
+    eval(sprintf('[I%d,RB%d] = imfuse(I%d,RB%d,I%d,RB%d,''blend'');',list(i+1),list(i+1),imglist(i+1),imglist(i+1),list(i),list(i)));
+end
+
+
+
 %{
+
+xMin = 0
+xMax = 1000
+
+yMin = 0
+yMax = 1000
+
+% Width and height of panorama.
+width  = round(xMax - xMin);
+height = round(yMax - yMin);
+xLimits = [xMin xMax];
+yLimits = [yMin yMax];
+panoramaView = imref2d([height width], xLimits, yLimits);
+
+for i = 1:18
+  %  eval(sprintf('T = projective2d(transpose(H%d));',i));
+    eval(sprintf('T = projective2d(H%d'');',i));
+
+  %  eval(sprintf('I = imwarp(''perspective'',H%d)',i));
+%warpedImage = imwarp(img1, T, 'OutputView', panoramaView);\
+    eval(sprintf('[I%d, RB%d]=imwarp(img%d,T);',i,i,i));
+    %figure;
+    subplot(3,6,i);
+    eval(sprintf('imshow(I%d)',i));
+    eval(sprintf('X = RB%i.XWorldLimits; Y = RB%i.YWorldLimits',i,i));
+    title([num2str(Y(1))]);
+end
+
+[I12,RB12] = imfuse(I1,RB1,I2,RB2, 'blend');
+list = [1,12,123,1234,12345,123456, 1234567, 12345678,123456789,12345678910,1234567891011,1234567891012,1234567891013,1234567891014,1234567891015, 1234567891016, 1234567891017, 1234567891018];
+for i = 2:17
+    eval(sprintf('[I%d,RB%d] = imfuse(I%d,RB%d,I%d,RB%d,''blend'');',list(i+1),list(i+1),i,i,list(i),list(i)));
+end
+
+
 xMin = 0;
 xMax = 1000;
 
