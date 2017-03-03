@@ -56,7 +56,46 @@ void ProjectorBase::setCameraParams(InputArray _K, InputArray _R, InputArray _T)
     Mat_<float> T_(T.reshape(0, 3));
     t[0] = T_(0,0); t[1] = T_(1,0); t[2] = T_(2,0);
 }
+
+============================================
+
+
+void SphericalProjector::mapBackward(float u, float v, float &x, float &y)
+{
+    u /= scale;
+    v /= scale;
+
+    float sinv = sinf(static_cast<float>(CV_PI) - v);
+    float x_ = sinv * sinf(u);
+    float y_ = cosf(static_cast<float>(CV_PI) - v);
+    float z_ = sinv * cosf(u);
+
+    float z;
+    x = k_rinv[0] * x_ + k_rinv[1] * y_ + k_rinv[2] * z_;
+    y = k_rinv[3] * x_ + k_rinv[4] * y_ + k_rinv[5] * z_;
+    z = k_rinv[6] * x_ + k_rinv[7] * y_ + k_rinv[8] * z_;
+
+    if (z > 0) { x /= z; y /= z; }
+    else x = y = -1;
+}
+
 %}
+% set camera params 
+Rinv = R'
+Kinv = K^(-1);
+RKinv = R*Kinv;
+KRinv = K*Rinv;
+
+% map backward
+% TODO: what is scale?
+
+for v = 1:xxx
+    for u = 1:xxx     
+        sinv = sin(pi - v);
+        x_
+    end
+end
+
 
 
 
