@@ -209,7 +209,6 @@ end
 %    -0.0839    0.2236    0.7674
 %}
 
-
 % based on the new euls, display the result
 figure;
 hold on 
