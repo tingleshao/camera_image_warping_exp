@@ -1,27 +1,77 @@
-function [ output_args ] = opencv_build_maps( image_size, K, R )
+function [ xmap, ymap, dst, dst_width, dst_height ] = opencv_build_maps( image_size, K, R )
 % a reference implementation of the opencv corresponding function
+% buid the map: (u,v) -> (x,y) from the K and R matrices. 
+% u and v are corrdinates on the spherical surface. 
+% x and y are corrdinates on the planar surface.
+
+% set camera params 
+Rinv = R'
+Kinv = K^(-1);
+RKinv = R*Kinv;
+KRinv = K*Rinv;
+
+% detect result roi 
+
+
+
+
+% map backward: find the x and y for the u and v 
+% TODO: what is scale?
+v_length = xxx;
+u_length = xxx;
+xmap = zeros(v_length, u_length);
+ymap = zeros(v_length, u_length);
+for v = 1:v_length
+    for u = 1:u_length     
+        sinv = sin(pi - v);
+        x_ = sinv * sin(u);
+        y_ = cos(pi - v);
+        z_ = sin * cos(u); 
+        
+        x = KRinv(1,1) * x_ + KRinv(1,2) * y_ + KRinv(1,3) * z_; 
+        y = KRinv(2,1) * x_ + KRinv(2,2) * y_ + KRinv(2,3) * z_; 
+        z = KRinv(3,1) * x_ + KRinv(3,2) * y_ + KRinv(3,3) * z_; 
+        
+        if (z > 0)
+            x = x / z;
+            y = y / z;
+        else 
+            x = -1;
+            y = -1;
+        end
+        xmap(v,u) = x;
+        ymap(v,u) = y;
+    end 
+end
 
 %{
 C++ code...
 
-projector_.setCameraParams(K, R);
-Point dst_tl, dst_br;
-detectResultRoi(src_size, dst_tl, dst_br);
-_xmap.create(dst_br.y - dst_tl.y + 1, dst_br.x - dst_tl.x + 1, CV_32F);
-_ymap.create(dst_br.y - dst_tl.y + 1, dst_br.x - dst_tl.x + 1, CV_32F);
-
-Mat xmap = _xmap.getMat(), ymap = _ymap.getMat();
-
-float x, y;
-for (int v = dst_tl.y; v <= dst_br.y; ++v) {
-    for (int u = dst_tl.x; u <= dst_br.x; ++u) {
-        projector_.mapBackward(static_cast<float>(u), static_cast<float>(v), x, y);
-        xmap.at<float>(v - dst_tl.y, u - dst_tl.x) = x;
-        ymap.at<float>(v - dst_tl.y, u - dst_tl.x) = y;
-    }
+============================================
+void SphericalWarper::detectResultRoi(Size src_size, Point &dst_tl, Point &dst_br)
+{...
 }
+===================================
 
-return Rect(dst_tl, dst_br);
+
+void SphericalProjector::mapBackward(float u, float v, float &x, float &y)
+{
+    u /= scale;
+    v /= scale;
+
+    float sinv = sinf(static_cast<float>(CV_PI) - v);
+    float x_ = sinv * sinf(u);
+    float y_ = cosf(static_cast<float>(CV_PI) - v);
+    float z_ = sinv * cosf(u);
+
+    float z;
+    x = k_rinv[0] * x_ + k_rinv[1] * y_ + k_rinv[2] * z_;
+    y = k_rinv[3] * x_ + k_rinv[4] * y_ + k_rinv[5] * z_;
+    z = k_rinv[6] * x_ + k_rinv[7] * y_ + k_rinv[8] * z_;
+
+    if (z > 0) { x /= z; y /= z; }
+    else x = y = -1;
+}
 
 ==================
 
@@ -56,47 +106,30 @@ void ProjectorBase::setCameraParams(InputArray _K, InputArray _R, InputArray _T)
     Mat_<float> T_(T.reshape(0, 3));
     t[0] = T_(0,0); t[1] = T_(1,0); t[2] = T_(2,0);
 }
+======================
 
-============================================
+projector_.setCameraParams(K, R);
+Point dst_tl, dst_br;
+detectResultRoi(src_size, dst_tl, dst_br);
+_xmap.create(dst_br.y - dst_tl.y + 1, dst_br.x - dst_tl.x + 1, CV_32F);
+_ymap.create(dst_br.y - dst_tl.y + 1, dst_br.x - dst_tl.x + 1, CV_32F);
 
+Mat xmap = _xmap.getMat(), ymap = _ymap.getMat();
 
-void SphericalProjector::mapBackward(float u, float v, float &x, float &y)
-{
-    u /= scale;
-    v /= scale;
-
-    float sinv = sinf(static_cast<float>(CV_PI) - v);
-    float x_ = sinv * sinf(u);
-    float y_ = cosf(static_cast<float>(CV_PI) - v);
-    float z_ = sinv * cosf(u);
-
-    float z;
-    x = k_rinv[0] * x_ + k_rinv[1] * y_ + k_rinv[2] * z_;
-    y = k_rinv[3] * x_ + k_rinv[4] * y_ + k_rinv[5] * z_;
-    z = k_rinv[6] * x_ + k_rinv[7] * y_ + k_rinv[8] * z_;
-
-    if (z > 0) { x /= z; y /= z; }
-    else x = y = -1;
+float x, y;
+for (int v = dst_tl.y; v <= dst_br.y; ++v) {
+    for (int u = dst_tl.x; u <= dst_br.x; ++u) {
+        projector_.mapBackward(static_cast<float>(u), static_cast<float>(v), x, y);
+        xmap.at<float>(v - dst_tl.y, u - dst_tl.x) = x;
+        ymap.at<float>(v - dst_tl.y, u - dst_tl.x) = y;
+    }
 }
 
+return Rect(dst_tl, dst_br);
+
+======================
+
 %}
-% set camera params 
-Rinv = R'
-Kinv = K^(-1);
-RKinv = R*Kinv;
-KRinv = K*Rinv;
-
-% map backward
-% TODO: what is scale?
-
-for v = 1:xxx
-    for u = 1:xxx     
-        sinv = sin(pi - v);
-        x_
-    end
-end
-
-
 
 
 
