@@ -17,6 +17,7 @@ x_ = rkinv(1,1) * x + rkinv(1,2) * y + rkinv(1,3);
 y_ = rkinv(2,1) * x + rkinv(2,2) * y + rkinv(2,3); 
 z_ = rkinv(3,1) * x + rkinv(3,2) * y + rkinv(3,3);
 
+scale = 1;
 u = scale * atan2(x_, z_);
 w = y_ / sqrt(x_ * x_ + y_ * y_ + z_ * z_);
 if w == w 

@@ -5,28 +5,25 @@ function [ xmap, ymap, dst, dst_width, dst_height ] = opencv_build_maps( image_s
 % x and y are corrdinates on the planar surface.
 
 % set camera params 
-Rinv = R'
+Rinv = R';
 Kinv = K^(-1);
 RKinv = R*Kinv;
 KRinv = K*Rinv;
 
-% detect result roi 
-
-
-
+% detect result roi
+[ upper_left, lower_right ] = opencv_detect_result_roi_by_border( image_size, Rinv );
+v_length = lower_right(2) - upper_left(2);
+u_length = lower_right(1) - upper_left(1);
 
 % map backward: find the x and y for the u and v 
-% TODO: what is scale?
-v_length = xxx;
-u_length = xxx;
-xmap = zeros(v_length, u_length);
-ymap = zeros(v_length, u_length);
+xmap = uint8(zeros(uint8(v_length), uint8(u_length)));
+ymap = uint8(zeros(uint8(v_length), uint8(u_length)));
 for v = 1:v_length
     for u = 1:u_length     
         sinv = sin(pi - v);
         x_ = sinv * sin(u);
         y_ = cos(pi - v);
-        z_ = sin * cos(u); 
+        z_ = sinv * cos(u); 
         
         x = KRinv(1,1) * x_ + KRinv(1,2) * y_ + KRinv(1,3) * z_; 
         y = KRinv(2,1) * x_ + KRinv(2,2) * y_ + KRinv(2,3) * z_; 
@@ -46,14 +43,11 @@ end
 
 %{
 C++ code...
-
 ============================================
 void SphericalWarper::detectResultRoi(Size src_size, Point &dst_tl, Point &dst_br)
 {...
 }
 ===================================
-
-
 void SphericalProjector::mapBackward(float u, float v, float &x, float &y)
 {
     u /= scale;
@@ -107,7 +101,6 @@ void ProjectorBase::setCameraParams(InputArray _K, InputArray _R, InputArray _T)
     t[0] = T_(0,0); t[1] = T_(1,0); t[2] = T_(2,0);
 }
 ======================
-
 projector_.setCameraParams(K, R);
 Point dst_tl, dst_br;
 detectResultRoi(src_size, dst_tl, dst_br);
@@ -124,14 +117,8 @@ for (int v = dst_tl.y; v <= dst_br.y; ++v) {
         ymap.at<float>(v - dst_tl.y, u - dst_tl.x) = y;
     }
 }
-
 return Rect(dst_tl, dst_br);
-
 ======================
-
 %}
-
-
-
 end
 
