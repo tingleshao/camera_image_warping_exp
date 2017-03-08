@@ -1,6 +1,6 @@
-function [ result_upper_left, result_lower_right ] = opencv_detect_result_roi( img_size, rinv )
+function [ result_upper_left, result_lower_right ] = opencv_detect_result_roi( img_size, rinv, k)
 
-[result_upper_left, result_lower_right] = detectResultRoiByBorder(img_size);
+[result_upper_left, result_lower_right] = detect_result_roi_by_border(img_size);
 tl_uf = result_upper_left(1);
 tl_vf = result_upper_left(2);
 br_uf = result_lower_right(1);
