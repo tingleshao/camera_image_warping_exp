@@ -1,4 +1,39 @@
 function [ upper_left, lower_right ] = opencv_detect_result_roi_by_border( img_size )
+tl_uf = 100000000;
+tl_vf = 100000000;
+br_uf = 100000000;
+br_vf = 100000000;
+
+for x = 1:img_size(1)
+    [u, v] = opencv_map_forward(x, 0, u, v);
+    tl_uf = min(tl_uf, u); 
+    tl_vf = min(tl_vf, v);
+    br_uf = max(br_uf, u);
+    br_vf = max(br_vf, v);
+    
+    [u,v] = opencv_mapforward(x, img_size(2));
+    tl_uf = min(tl_uf, u);
+    tl_vf = min(tl_vf, v);
+    br_uf = max(br_uf, u);
+    br_vf = max(br_vf, v);
+end
+for y = 1:img_size(2)
+    [u, v] = opencv_map_forward(y, 0, u, v);
+    tl_uf = min(tl_uf, u); 
+    tl_vf = min(tl_vf, v);
+    br_uf = max(br_uf, u);
+    br_vf = max(br_vf, v);
+    
+    [u,v] = opencv_mapforward(img_size(2), y);
+    tl_uf = min(tl_uf, u);
+    tl_vf = min(tl_vf, v);
+    br_uf = max(br_uf, u);
+    br_vf = max(br_vf, v);
+end
+
+upper_left = [tl_uf, tl_vf];
+lower_right = [br_uf, br_vf];
+
 %{
 C++ code...
 ===========
