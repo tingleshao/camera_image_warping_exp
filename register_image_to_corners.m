@@ -150,6 +150,9 @@ corners(:,1) = corners(:,1) + 3258;
 % and try warping all images, see how the result look like
 
 % Synthesize images, with colors
+
+% TODO: test it .
+
 for i = 1:18
    eval(sprintf('img%d = imresize(imread(''mcam_%d_scale_2.jpg''),[corners(i,4),corners(i,3)]);',i,i));
 end
