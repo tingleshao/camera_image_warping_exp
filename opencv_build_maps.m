@@ -7,17 +7,20 @@ function [ xmap, ymap, dst, dst_width, dst_height ] = opencv_build_maps( image_s
 % set camera params 
 Rinv = R';
 Kinv = K^(-1);
-RKinv = R*Kinv;
+%RKinv = R*Kinv;
 KRinv = K*Rinv;
 
 % detect result roi
-[ upper_left, lower_right ] = opencv_detect_result_roi_by_border( image_size, Rinv );
+[ upper_left, lower_right ] = opencv_detect_result_roi( image_size, Rinv, K);
+upper_left
+lower_right
 v_length = lower_right(2) - upper_left(2);
 u_length = lower_right(1) - upper_left(1);
 
 % map backward: find the x and y for the u and v 
 xmap = uint8(zeros(uint8(v_length), uint8(u_length)));
 ymap = uint8(zeros(uint8(v_length), uint8(u_length)));
+
 for v = 1:v_length
     for u = 1:u_length     
         sinv = sin(pi - v);
@@ -40,6 +43,11 @@ for v = 1:v_length
         ymap(v,u) = y;
     end 
 end
+
+dst_width = u_length;
+dst_height = v_length;
+dst = [upper_left, lower_right];
+
 
 %{
 C++ code...

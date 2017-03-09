@@ -15,7 +15,7 @@ return dst_roi.tl();
 %}
 
 % build maps 
-[xmap, ymap, dst, dst_width, dst_height] = opencv_build_maps(size(image), K, R);
+[xmap, ymap, dst, dst_width, dst_height] = opencv_build_maps(size(input_image), K, R);
 
 result = opencv_remap(dst_width, dst_height, input_image, xmap, ymap);
 

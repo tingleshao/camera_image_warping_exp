@@ -1,8 +1,8 @@
 function [ upper_left, lower_right ] = opencv_detect_result_roi_by_border( img_size, rinv )
 tl_uf = 100000000;
 tl_vf = 100000000;
-br_uf = 100000000;
-br_vf = 100000000;
+br_uf = -100000000;
+br_vf = -100000000;
 
 for x = 1:img_size(1)
     [u, v] = opencv_map_forward(x, 0, rinv);

@@ -130,3 +130,5 @@ R18 = [0.91922122, 0.02641619, -0.39285406;
 image1 = imread('mcam_1_scale_2.jpg');
 
 [warped_image1, corner1] = opencv_warp_image(image1, R1, K1);
+figure
+imshow(warped_image1)

@@ -3,10 +3,13 @@ function [ output_image ] = opencv_remap( new_w, new_h, input_image, xmap, ymap 
 
 % xmap: on the spherical plane x, which x on the original plane it is
 % ymap: on the spherical plane y, which y on the original plane it is
-output_image= zeros(new_h,new_w,3);
-for i = 1:new_h
-    for j = 1:new_w  
-        output_image( i, j)= input_image(ymap(i,j), xmap(i,j));    
+output_image= zeros(int8(new_h),int8(new_w),3);
+ymap
+xmap
+for i = 1:uint8(new_h)
+    for j = 1:uint8(new_w)
+        
+        output_image(i, j)= input_image(uint8(ymap(i,j)), uint8(xmap(i,j)));    
     end
 end
 end
