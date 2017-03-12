@@ -1,4 +1,4 @@
-function [ ] = plot_feature_locations( img1, fe_locs1, img2, fe_locs2 )
+function [ ] = plot_feature_locations( img1, fe_locs1, img2, fe_locs2, n)
 % plot feature locations.
 % resize images
 % fe: a list of x, ys 
@@ -12,9 +12,11 @@ hold on
 r= 5;
 th = 0:pi/50:2*pi;
 
-for i = 1:size(fe_locs1, 1) 
-    [x,y] = fe_locs1(i,:);
-    
+for i = 1:n 
+    x_y = fe_locs1(i,:);
+    x= x_y(:,1);
+        y= x_y(:,2);
+
     xunit = r * cos(th) + x;
     yunit = r * sin(th) + y;
     
@@ -25,9 +27,11 @@ figure;
 imshow(img2);
 hold on 
 
-for i = 1:size(fe_locs2, 1) 
-    [x,y] = fe_locs2(i,:);
+for i = 1:n
+    x_y = fe_locs2(i,:);
     
+    x= x_y(:,1);
+        y= x_y(:,2);
     xunit = r * cos(th) + x;
     yunit = r * sin(th) + y;
     
